@@ -10,13 +10,24 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'gmaps4rails'
+gem 'simplecov', :require => false, :group => :test
+gem 'simple_form'
+gem 'faker'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   gem 'byebug'
+  gem 'faker'
   gem 'rspec-rails', '~> 3.0'
+  gem 'factory_girl_rails'
+  gem 'awesome_print'
+  gem 'hirb'
+  gem 'interactive_editor'
+  gem 'nyan-cat-formatter'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :development do
