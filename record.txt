@@ -1,0 +1,27 @@
+deleted from application.js
+//= require underscore
+//= require gmaps/google
+
+// coordinates
+var coordinates = {};
+var counter = 0;
+// adds latitude and longitude coordinates of click location on map
+// to an object of coordinates
+// places marker on map
+map.addListener('click', function(event) {
+  coordinates[counter] = {lat: event.latLng.lat(),
+                          lng: event.latLng.lng()
+                        }
+  counter ++
+  console.log(coordinates);
+  console.log(counter);
+  var marker = new google.maps.Marker({
+    position: coordinates[counter - 1],
+    map: map,
+    title: "You nearly hit me!",
+    icon: bikeImage
+  });
+});
+
+
+jqery debounce
