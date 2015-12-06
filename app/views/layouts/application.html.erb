@@ -5,7 +5,6 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-  <%= javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false" %>
 </head>
 <body>
   <script async defer
@@ -19,7 +18,7 @@
         center: {lat: 49.265, lng: -123.1},
         zoom: 14,
         minZoom: 14,
-        maxZoom: 18,
+        maxZoom: 18
       });
       var geocoder = new google.maps.Geocoder();
 
@@ -49,8 +48,8 @@
                                 lng: event.latLng.lng()
                               }
         counter ++
-        console.log(coordinates);
-        console.log(counter);
+        // console.log(coordinates);
+        // console.log(counter);
         var marker = new google.maps.Marker({
           position: coordinates[counter - 1],
           map: map,
@@ -64,7 +63,8 @@
 
 
         </script>
-<%= yield %>
+
+    <%= yield %>
 
 </body>
 </html>

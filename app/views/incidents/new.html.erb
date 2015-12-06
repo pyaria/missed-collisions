@@ -1,15 +1,30 @@
-<%= simple_form_for @incident do |incident| %>
-  <%= incident.input :date_time %>
+<div class="container-fluid">
+  <div class="row">
+    <%= simple_form_for @incident, remote: true do |incident| %>
+      <div class="col-md-6" id="incident-report">
+        <%= incident.input :date_time %>
+        <%= incident.input :phone_email, placeholder: "Phone or Email (optional)" %>
+        <%= incident.input :location, placeholder: "Street address or cross streets" %>
+        <div id="location">
+          <p></p>
+          <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
 
-  <%= incident.input :phone_email %>
-  <%= incident.input :location_1 %>
-  <%= incident.input :location_2 %>
-  <%= link_to "Map", root_path %>
-  <%= incident.input :license %>
-  <%= incident.input :you %>
-  <%= incident.input :them %>
-  <%= incident.input :incident_type %>
-  <%= incident.input :details %>
-  <%= incident.submit %>
+            src=https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
+            ></iframe>
 
-<% end %>
+        </div>
+
+        <%= incident.input :license, placeholder: "License number (optional)" %>
+        <%= incident.input :you, collection: ["YOU", "car", "bike", "pedestrian"], selected: "YOU", disabled: "YOU" %>
+        <%= incident.input :them, collection: ["THEM", "car", "bike", "pedestrian", "road hazard"], selected: "THEM", disabled: "THEM" %>
+        <%= incident.input :incident_type %>
+      </div>
+      <div class="col-md-6" id="incident-details">
+        <%= incident.input :details, input_html: {rows: 20, cols: 50} %>
+        <%= incident.submit %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
