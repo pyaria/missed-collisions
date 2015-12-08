@@ -1,4 +1,11 @@
+
 $(document).on('ready', function(){
+
+  $('form').submit(function(event){
+    console.log("submitting!");
+    $('.modal').modal('hide')
+    event.preventDefault;
+  })
 
   $('#incident_location').on('keyup',function () {
       var searchValue = $(this).val();
@@ -29,7 +36,7 @@ $(document).on('ready', function(){
       console.log(results[0].geometry.location.lat()); // RETURNS LAT
       console.log(reader[0]);
       $('#location p').replaceWith("<p>Did you mean: " + reader[0] + "?" + 'No'.link('#') + "</p>");
-      
+
       // map.set('styles', [
       //
       // ])

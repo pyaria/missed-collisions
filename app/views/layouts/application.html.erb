@@ -7,38 +7,35 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <%= simple_form_for @incident, remote: true do |incident| %>
-        <div class="col-md-6" id="incident-report">
-          <%= incident.input :date_time %>
-          <%= incident.input :phone_email, placeholder: "Phone or Email (optional)" %>
-          <%= incident.input :location, placeholder: "Street address or cross streets" %>
-          <div id="location">
-            <p></p>
-            <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
-
-              src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
-              ></iframe>
-
+  <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="incident-form">
+        <%= simple_form_for @incident, remote: true do |incident| %>
+          <div id="incident">
+            <div class="col-md-6" id="incident-report">
+              <%= incident.input :date_time %>
+              <%= incident.input :phone_email, placeholder: "Phone or Email (optional)" %>
+              <%= incident.input :location, placeholder: "Street address or cross streets" %>
+              <div id="location">
+                <p></p>
+                <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
+                  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
+                  ></iframe>
+              </div>
+              <%= incident.input :license, placeholder: "License number (optional)" %>
+              <%= incident.input :you, collection: ["YOU", "car", "bike", "pedestrian"], selected: "YOU", disabled: "YOU" %>
+              <%= incident.input :them, collection: ["THEM", "car", "bike", "pedestrian", "road hazard"], selected: "THEM", disabled: "THEM" %>
+              <%= incident.input :incident_type %>
+            </div>
+            <div class="col-md-6" id="incident-details">
+              <%= incident.input :details, input_html: {rows: 20, cols: 50} %>
+              <%= incident.submit %>
+            </div>
           </div>
-
-          <%= incident.input :license, placeholder: "License number (optional)" %>
-          <%= incident.input :you, collection: ["YOU", "car", "bike", "pedestrian"], selected: "YOU", disabled: "YOU" %>
-          <%= incident.input :them, collection: ["THEM", "car", "bike", "pedestrian", "road hazard"], selected: "THEM", disabled: "THEM" %>
-          <%= incident.input :incident_type %>
-        </div>
-        <div class="col-md-6" id="incident-details">
-          <%= incident.input :details, input_html: {rows: 20, cols: 50} %>
-          <%= incident.submit %>
-        </div>
-
-      <% end %>
-
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
   <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
     </script>
@@ -96,7 +93,22 @@
 
         </script>
   <div class="sidebar thin">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+    <button type="button" data-toggle="modal" data-target=".report-an-incident">Report an Incident</button>
+    <hr>
+    <p>Filter Map</p>
+    <p>Car</p>
+    <p>Bike</p>
+    <p>Pedestrian</p>
+    <p>Road Hazard</p>
+    <hr>
+    <p>Hour Scale</p>
+    <p>Month Scale</p>
+    <hr>
+    <p>Stats</p>
+    <hr>
+    <p>Social Media Icons</p>
+    <p>About Us/Contact Us</p>
+
   </div>
     <%= yield %>
 </body>
