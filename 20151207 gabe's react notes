@@ -1,0 +1,8 @@
+var container = $('#container')
+var button = $('#button')
+
+button.on('click', function(){
+  var value = parseInt(container.html(), 10) ## to be sure that it returns a decimal and not a hexadecimal
+  var newValue = value + 1;
+  container.html(newValue);
+})

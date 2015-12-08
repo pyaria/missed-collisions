@@ -1,5 +1,6 @@
 class IncidentsController < ApplicationController
   def index
+    @incident = Incident.new
   end
 
   def new

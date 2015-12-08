@@ -1,0 +1,34 @@
+/* CSS declarations go here */
+body, html {
+  height: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  position: static;
+}
+
+.sidebar {
+  height: 100%;
+  float: left;
+  background-color: orange;
+  position: absolute;
+  transition: 2s;
+  z-index: 100;
+}
+
+.thin {
+  width: 7%;
+}
+
+.wide {
+  width: 10%;
+}
+
+.small {
+  margin: 5px;
+}
