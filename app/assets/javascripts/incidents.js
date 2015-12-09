@@ -1,10 +1,15 @@
 
 $(document).on('ready', function(){
+  $('.modal').modal('show');
 
   $('form').submit(function(event){
     console.log("submitting!");
     $('.modal').modal('hide')
     event.preventDefault;
+  })
+
+  $('.sidebar').hover(function(){
+    $(this).toggleClass("wide");
   })
 
   $('#incident_location').on('keyup',function () {

@@ -14,6 +14,7 @@ gem 'simplecov', :require => false, :group => :test
 gem 'simple_form'
 gem 'faker'
 gem 'font-awesome-rails'
+gem 'geocoder'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

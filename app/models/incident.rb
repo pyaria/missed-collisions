@@ -8,6 +8,8 @@ class Incident < ActiveRecord::Base
   # validate   :phone_email_option
   validate :phone_email_which
 
+  geocoded_by :location
+  after_validation :geocode
 
   def phone_email_which
     if phone_email.present?
