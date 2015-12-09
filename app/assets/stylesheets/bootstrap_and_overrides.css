@@ -36,5 +36,37 @@ button {
 #incident {
   position: fixed;
   background-color: white;
-  margin: 0 auto;
+  padding: 10%;
+  border-radius: 25px;
+  width: 100%;
+}
+
+.modal {
+  transition: 3s;
+}
+
+.modal-content {
+  width: inherit;
+  height: inherit;
+  margin: 0;
+}
+
+.modal-dialog {
+  width: 80%;
+  left: 3%;
+}
+
+input{
+  margin: 5px;
+}
+
+#incident_them,
+#incident_you {
+  padding: 5px;
+  margin: 5px;
+}
+
+
+p {
+  margin: 0;
 }

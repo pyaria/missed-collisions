@@ -1,14 +1,18 @@
 class IncidentsController < ApplicationController
+
+
   def index
     @incident = Incident.new
   end
 
   def new
     @incident = Incident.new
+    @YOU = ["car", "bike", "pedestrian"]
   end
 
   def create
     @incident = Incident.new incident_params
+    @incident.date_time = 
     location =  params[:location]
     @incident.location =
     respond_to do |format|

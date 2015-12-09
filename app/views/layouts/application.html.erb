@@ -7,30 +7,61 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" id="incident-form">
-        <%= simple_form_for @incident, remote: true do |incident| %>
+    <div class="modal-dialog modal-lg" >
+      <div class="modal-content" id="incident-form" >
+        <%= form_for @incident, data: { behavior: "autosave" }, remote: true do |incident| %>
           <div id="incident">
-            <div class="col-md-6" id="incident-report">
-              <%= incident.input :date_time %>
-              <%= incident.input :phone_email, placeholder: "Phone or Email (optional)" %>
-              <%= incident.input :location, placeholder: "Street address or cross streets" %>
-              <div id="location">
-                <p></p>
-                <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
-                  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
-                  ></iframe>
+            <div class="col-md-6 form-group" id="incident-report">
+              <div class="form-inline">
+                <h1>Submit a Report!</h1>
+                <%= incident.label :date_time, "Date" %>
+                <%= incident.date_field :date_time, class: "form-control" %>
+                <%= incident.label :date_time, "Time" %>
+                <%= incident.time_field :date_time, class: "form-control" %>
               </div>
-              <%= incident.input :license, placeholder: "License number (optional)" %>
-              <%= incident.input :you, collection: ["YOU", "car", "bike", "pedestrian"], selected: "YOU", disabled: "YOU" %>
-              <%= incident.input :them, collection: ["THEM", "car", "bike", "pedestrian", "road hazard"], selected: "THEM", disabled: "THEM" %>
-              <%= incident.input :incident_type %>
+              <div class="form-inline">
+                <%= incident.label :phone_email %>
+                <%= incident.text_field :phone_email,
+                                        placeholder: "Phone or Email (optional)",
+                                        class: "form-control" %>
+              </div>
+              <div class="form-inline" id="location">
+                  <%= incident.label :location %>
+                  <%= incident.text_field :location, placeholder: "Street address or cross streets", class: "form-control" %>
+                <button id="pin-on-map">Pin on Map</button>
+                `<p></p>
+                <!-- MAPPING -->
+                <!-- <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
+                  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
+                `  ></iframe> -->
+              </div>
+              <div>
+                <%= incident.label :license %>
+                <%= incident.text_field :license,
+                                        placeholder: "License number (optional)",
+                                        class: "form-control" %>
+              </div>
+              <div>
+                <%= incident.select :you, Incident::YOU, { prompt: "YOU" } %>
+                <%= incident.select :them, Incident::THEM, { prompt: "THEM" } %>
+              </div>
+              <div>
+                <%= incident.label :incident_type %>
+                <%= incident.text_field :incident_type,
+                                        placeholder: "Eg. ran a red light, aggressive, distracted, ...",
+                                        class: "form-control" %>
+              </div>
             </div>
-            <div class="col-md-6" id="incident-details">
-              <%= incident.input :details, input_html: {rows: 20, cols: 50} %>
-              <%= incident.submit %>
+            <div class="col-md-6 form-group" id="incident-details">
+                <h1>Incident Details</h1>
+              <%= incident.label :details %>
+              <%= incident.text_area :details, class: "form-control", rows: 15 %>
+              <div>
+                <%= incident.submit %>
+              </div>
             </div>
           </div>
         <% end %>
@@ -54,9 +85,6 @@
         maxZoom: 18
       });
       var geocoder = new google.maps.Geocoder();
-
-      // specifying bike marker
-      // '<%= asset_path("bike.png") %>';
       var bikeImage = new google.maps.MarkerImage('/assets/bike.png',
                                         new google.maps.Size(32, 35),
                                         new google.maps.Point(0, 0),
@@ -72,23 +100,26 @@
 
       // coordinates
       var coordinates = {};
-      var counter = 0;
       // adds latitude and longitude coordinates of click location on map
       // to an object of coordinates
       // places marker on map
       map.addListener('click', function(event) {
-        coordinates[counter] = {lat: event.latLng.lat(),
-                                lng: event.latLng.lng()
-                              }
-        counter ++
+        coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() }
+
         // console.log(coordinates);
         // console.log(counter);
         var marker = new google.maps.Marker({
-          position: coordinates[counter - 1],
+          position: coordinates,
           map: map,
-          title: "You nearly hit me!",
-          icon: bikeImage
+          icon: bikeImage,
+          draggable: true,
+          infowindow: coordinates
         })
+        var infowindow = new google.maps.InfoWindow({
+
+          content: event.latLng.lat().toString() + " " + event.latLng.lng().toString()
+        });
+        infowindow.open(map, marker);
       })
     }
 

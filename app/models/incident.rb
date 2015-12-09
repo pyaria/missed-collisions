@@ -11,6 +11,9 @@ class Incident < ActiveRecord::Base
   geocoded_by :location
   after_validation :geocode
 
+  YOU = ["car", "bike", "pedestrian"]
+  THEM = ["car", "bike", "pedestrian", "road hazard"]
+
   def phone_email_which
     if phone_email.present?
       if phone_email.include? "@"
