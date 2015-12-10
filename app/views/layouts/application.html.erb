@@ -7,6 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
+  <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
+  </script>
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -31,12 +35,8 @@
               <div class="form-inline" id="location">
                   <%= incident.label :location %>
                   <%= incident.text_field :location, placeholder: "Street address or cross streets", class: "form-control" %>
-                <button id="pin-on-map">Pin on Map</button>
-                `<p></p>
-                <!-- MAPPING -->
-                <!-- <iframe width="300" height="250" frameborder="0" style="border:0 feature:all|element:labels|visibility:off"
-                  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&q=main+hastings"
-                `  ></iframe> -->
+                <button id="pin-on-map">Find on Map</button>
+                <p></p>
               </div>
               <div>
                 <%= incident.label :license %>
@@ -55,11 +55,14 @@
                                         class: "form-control" %>
               </div>
             </div>
-            <div class="col-md-6 form-group" id="incident-details">
+            <div class="col-md-6 form-group">
+              <div id='map-for-mapping' class="invisible"></div>
+              <div id="incident-details">
                 <h1>Incident Details</h1>
-              <%= incident.label :details %>
-              <%= incident.text_area :details, class: "form-control", rows: 15 %>
-              <div>
+                <%= incident.label :details %>
+                <%= incident.text_area :details, class: "form-control", rows: 15 %>
+              </div>
+              <div id="submit-button">
                 <%= incident.submit %>
               </div>
             </div>
@@ -69,10 +72,6 @@
     </div>
   </div>
 
-  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
-  <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
-    </script>
 
     <script type="text/javascript">
     var geocoder;
@@ -120,7 +119,24 @@
           content: event.latLng.lat().toString() + " " + event.latLng.lng().toString()
         });
         infowindow.open(map, marker);
-      })
+
+        // EVENT NOT FIRING
+      // google.maps.event.addListener('zoom_changed', function(event){
+      //   console.log("drag ended!");
+      //   infowindow.close()
+      // })
+
+      //   coordinates = { marker.getPosition().lat(), marker.getPosition().lng() }
+      //
+      // var infowindow = new google.maps.InfoWindow({
+      //   content: marker.getPosition().lat().toString() + " " + marker.getPosition().lng().toString()
+      // });
+      // infowindow.open(map, marker);
+//       map.addListener('zoom_changed', function() {
+//   infowindow.setContent('Zoom: ' + map.getZoom());
+// });
+// }
+      });
     }
 
 
