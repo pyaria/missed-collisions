@@ -13,6 +13,7 @@ class Incident < ActiveRecord::Base
 
   YOU = ["car", "bike", "pedestrian"]
   THEM = ["car", "bike", "pedestrian", "road hazard"]
+  INCIDENTS = Incident.all
 
   def phone_email_which
     if phone_email.present?

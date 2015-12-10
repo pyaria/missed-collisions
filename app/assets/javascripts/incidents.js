@@ -16,10 +16,12 @@ $(document).on('ready', function() {
                                       new google.maps.Point(32 / 2, 35),
                                       new google.maps.Size(32, 35));
     event.preventDefault();
+    var geocoder = new google.maps.Geocoder;
+    var infowindow = new google.maps.InfoWindow;
     $('#location p').remove();
-    $('#map-for-mapping').toggleClass('invisible');
-    $('#incident-details').toggleClass('invisible');
-    $('#submit-button').toggleClass('invisible');
+    $('#map-for-mapping').removeClass('invisible');
+    $('#incident-details').addClass('invisible');
+    $('#submit-button').addClass('invisible');
     map = new google.maps.Map(document.getElementById('map-for-mapping'), {
           center: {lat: 49.265, lng: -123.1},
           zoom: 14,
@@ -40,8 +42,7 @@ $(document).on('ready', function() {
                     position: coordinates,
                     map: map,
                     icon: bikeImage,
-                    draggable: true,
-                    infowindow: "abc"
+                    draggable: true
                   })
         incidentLatLng = coordinates;
         markers.push(marker);
@@ -61,7 +62,10 @@ $(document).on('ready', function() {
   });
 
   $('#incident_you').focus(function() {
-    console.log('away');
+    $('#map-for-mapping').addClass('invisible');
+    $('#incident-details').removeClass('invisible');
+    $('#submit-button').removeClass('invisible');
+    geocodeLatLng(geocoder, map, infowindow);
   });
 
   $('.sidebar').hover(function() {
@@ -82,17 +86,12 @@ $(document).on('ready', function() {
       var address = $('#incident_location').val();
       geocoder.geocode({address: address}, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
-        // console.log("results")
-        // console.log(geolocate());
+        console.log("results")
           var reader = results[0].formatted_address.split(", ");
           console.log(results[0].geometry.location.lat()); // RETURNS LAT
           console.log(reader[0]);
-          $('#location p').replaceWith("<p>Did you mean " + reader[0] + "? If not, please......"+ "NO".link("#")+"</p>");
-          $('#location p').on("click", "a", function(event){
-            console.log('no clicked');
-            event.preventDefault();
-            $('#pin-on-map').click();
-          })
+          $('#location p').replaceWith("<p>Did you mean " + reader[0] +
+                          "? If not, please find your location on map</p>");
         } else {
           alert("Not okay!");
           // alert('Geocode was not successful for the following reason: ' + status);
@@ -102,45 +101,21 @@ $(document).on('ready', function() {
   });
 
   function geocodeLatLng(geocoder, map, infowindow) {
-    var latlngStr = incidentLatLng.split(',', 2);
-    var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+    var latlng = {lat: incidentLatLng.lat, lng: incidentLatLng.lng};
     geocoder.geocode({'location': latlng}, function(results, status) {
       if (status === google.maps.GeocoderStatus.OK) {
         if (results[1]) {
-          map.setZoom(11);
-          var marker = new google.maps.Marker({
-            position: latlng,
-            map: map
-          });
-          infowindow.setContent(results[1].formatted_address);
+          console.log(latlng);
+          address = results[0].formatted_address.split(",");
+          console.log(address[0]);
+          infowindow.setContent(address[0]);
           infowindow.open(map, marker);
-          $('#incident_location').val(results[1].formatted_address);
-          console.log(results[1].formatted_address);
+          $('#incident_location').val(address[0]);
         } else {
           window.alert('No results found');
         }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
       }
     });
   }
 
-            function geolocate() {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                  var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
-                  var circle = new google.maps.Circle({
-                    center: geolocation,
-                    radius: position.coords.accuracy
-                  });
-                  // console.log((circle.getBounds()));
-                  console.log("circle bounds " + circle.getBounds())
-                  return (circle.getBounds());
-                });
-              }
-
-            }
 })

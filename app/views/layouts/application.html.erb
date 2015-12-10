@@ -34,7 +34,9 @@
               </div>
               <div class="form-inline" id="location">
                   <%= incident.label :location %>
-                  <%= incident.text_field :location, placeholder: "Street address or cross streets", class: "form-control" %>
+                  <%= incident.text_field :location,
+                              placeholder: "Street address or cross streets",
+                              class: "form-control" %>
                 <button id="pin-on-map">Find on Map</button>
                 <p></p>
               </div>
@@ -72,8 +74,7 @@
     </div>
   </div>
 
-
-    <script type="text/javascript">
+<script>
     var geocoder;
     var map;
     function initMap() {
@@ -84,65 +85,13 @@
         maxZoom: 18
       });
       var geocoder = new google.maps.Geocoder();
-      var bikeImage = new google.maps.MarkerImage('/assets/bike.png',
-                                        new google.maps.Size(32, 35),
-                                        new google.maps.Point(0, 0),
-                                        new google.maps.Point(32 / 2, 35),
-                                        new google.maps.Size(32, 35))
 
-
-      // sends an alert of latitude and longitude coordinates of click location on map
-      // does not register a drag and drop as a click
-      // map.addListener('click', function(event) {
-      //   alert(event.latLng);
-      // });
-
-      // coordinates
       var coordinates = {};
-      // adds latitude and longitude coordinates of click location on map
-      // to an object of coordinates
-      // places marker on map
-      map.addListener('click', function(event) {
-        coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() }
 
-        // console.log(coordinates);
-        // console.log(counter);
-        var marker = new google.maps.Marker({
-          position: coordinates,
-          map: map,
-          icon: bikeImage,
-          draggable: true,
-          infowindow: coordinates
-        })
-        var infowindow = new google.maps.InfoWindow({
+}
 
-          content: event.latLng.lat().toString() + " " + event.latLng.lng().toString()
-        });
-        infowindow.open(map, marker);
+</script>
 
-        // EVENT NOT FIRING
-      // google.maps.event.addListener('zoom_changed', function(event){
-      //   console.log("drag ended!");
-      //   infowindow.close()
-      // })
-
-      //   coordinates = { marker.getPosition().lat(), marker.getPosition().lng() }
-      //
-      // var infowindow = new google.maps.InfoWindow({
-      //   content: marker.getPosition().lat().toString() + " " + marker.getPosition().lng().toString()
-      // });
-      // infowindow.open(map, marker);
-//       map.addListener('zoom_changed', function() {
-//   infowindow.setContent('Zoom: ' + map.getZoom());
-// });
-// }
-      });
-    }
-
-
-
-
-        </script>
   <div class="sidebar thin">
     <button type="button" data-toggle="modal" data-target=".report-an-incident">Report an Incident</button>
     <hr>
