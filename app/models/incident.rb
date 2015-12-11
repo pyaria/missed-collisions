@@ -1,6 +1,10 @@
 class Incident < ActiveRecord::Base
-  validates :date_time, presence: true
+  validates :reported_on, presence: true
+  validates_date :reported_at, :on_or_before => :today
+  validates :reported_at, presence: true
   validates :location, presence: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
   validates :you, presence: true
   validates :them, presence: true
   validates :incident_type, presence: true

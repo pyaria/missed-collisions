@@ -1,4 +1,6 @@
-/* CSS declarations go here */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import 'bootstrap-datetimepicker';
 body, html {
   height: 100%;
   position: relative;
@@ -17,9 +19,8 @@ img {
 }
 
 #map-for-mapping {
-  width: 300px;
+  width: 450px;
   height: 500px;
-  transition: 5s; DOESN'T WORK
 }
 
 .invisible {
@@ -64,6 +65,7 @@ button {
   width: inherit;
   height: inherit;
   margin: 0;
+  border: none;
 }
 
 .modal-dialog {

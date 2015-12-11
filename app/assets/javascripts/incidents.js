@@ -1,12 +1,30 @@
 $(document).on('ready', function() {
   var incidentLatLng;
+  var inputs = ["#incident_reported_on",
+                "#incident_reported_at",
+                "#incident_phone_email",
+                "#incident_location",
+                "#incident_license",
+                "#incident_latitude",
+                "#incident_longitude",
+                "#incident_you",
+                "#incident_them",
+                "#incident_incident_type",
+                "#incident_details"
+              ];
 
   $('.modal').modal('show').fadeIn();
 
   $('form').submit(function(event) {
-    console.log("submitting!");
-    $('.modal').modal('hide')
+    $('#incident_latitude').val(incidentLatLng.lat);
+    $('#incident_longitude').val(incidentLatLng.lng);
     event.preventDefault;
+    setTimeout(function(){
+      for (var i = 0; i < inputs.length; i++) {
+        $(inputs[i]).val("");
+      }
+    }, 0);
+    $('.modal').modal('hide');
   });
 
   $('#pin-on-map').click(function(event) {
@@ -21,7 +39,7 @@ $(document).on('ready', function() {
     $('#location p').remove();
     $('#map-for-mapping').removeClass('invisible');
     $('#incident-details').addClass('invisible');
-    $('#submit-button').addClass('invisible');
+    $('#submit-button input').addClass('invisible');
     map = new google.maps.Map(document.getElementById('map-for-mapping'), {
           center: {lat: 49.265, lng: -123.1},
           zoom: 14,
@@ -64,9 +82,22 @@ $(document).on('ready', function() {
   $('#incident_you').focus(function() {
     $('#map-for-mapping').addClass('invisible');
     $('#incident-details').removeClass('invisible');
-    $('#submit-button').removeClass('invisible');
-    geocodeLatLng(geocoder, map, infowindow);
+    $('#submit-button input').removeClass('invisible');
+    // geocodeLatLng(geocoder, map, infowindow);
   });
+  $('#incident_them').focus(function() {
+    $('#map-for-mapping').addClass('invisible');
+    $('#incident-details').removeClass('invisible');
+    $('#submit-button input').removeClass('invisible');
+    // geocodeLatLng(geocoder, map, infowindow);
+  });
+
+  $('input#incident_incident_type').on('keypress', function(event) {
+    var code = event.which;
+    if (code === 13) {
+      event.preventDefault();
+    }
+  })
 
   $('.sidebar').hover(function() {
     $(this).toggleClass("wide");
@@ -92,9 +123,6 @@ $(document).on('ready', function() {
           console.log(reader[0]);
           $('#location p').replaceWith("<p>Did you mean " + reader[0] +
                           "? If not, please find your location on map</p>");
-        } else {
-          alert("Not okay!");
-          // alert('Geocode was not successful for the following reason: ' + status);
         }
       });
     }

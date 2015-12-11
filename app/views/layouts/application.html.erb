@@ -2,7 +2,24 @@
 <html>
 <head>
   <title>MissedCollisions</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <script>
+      var geocoder;
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 49.265, lng: -123.1},
+          zoom: 14,
+          minZoom: 14,
+          maxZoom: 18
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        var coordinates = {};
+      }
+
+  </script>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
@@ -14,17 +31,23 @@
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <!-- <div class="modal-header" hidden="true"></div> -->
     <div class="modal-dialog modal-lg" >
       <div class="modal-content" id="incident-form" >
-        <%= form_for @incident, data: { behavior: "autosave" }, remote: true do |incident| %>
+        <%= simple_form_for @incident, data: { behavior: "autosave" }, remote: true do |incident| %>
           <div id="incident">
-            <div class="col-md-6 form-group" id="incident-report">
+            <div class="col-sm-6 form-group" id="incident-report">
               <div class="form-inline">
                 <h1>Submit a Report!</h1>
-                <%= incident.label :date_time, "Date" %>
-                <%= incident.date_field :date_time, class: "form-control" %>
-                <%= incident.label :date_time, "Time" %>
-                <%= incident.time_field :date_time, class: "form-control" %>
+                <div class="row">
+                <div class='input-group date form-group' id='datepicker'>
+                  <%= incident.date_field :reported_on, as: :date_picker %>
+                  
+                </div>
+                <div class='input-group time form-group' id='timepicker'>
+                  <%= incident.time_field :reported_at, as: :time_picker %>
+                </div>
+              </div>
               </div>
               <div class="form-inline">
                 <%= incident.label :phone_email %>
@@ -37,6 +60,8 @@
                   <%= incident.text_field :location,
                               placeholder: "Street address or cross streets",
                               class: "form-control" %>
+                  <%= incident.hidden_field :latitude %>
+                  <%= incident.hidden_field :longitude %>
                 <button id="pin-on-map">Find on Map</button>
                 <p></p>
               </div>
@@ -61,8 +86,9 @@
               <div id='map-for-mapping' class="invisible"></div>
               <div id="incident-details">
                 <h1>Incident Details</h1>
-                <%= incident.label :details %>
-                <%= incident.text_area :details, class: "form-control", rows: 15 %>
+                <%= incident.text_area :details,  class: "form-control",
+                                                  rows: 20,
+                                                  placeholder: "optional details" %>
               </div>
               <div id="submit-button">
                 <%= incident.submit %>
@@ -74,23 +100,7 @@
     </div>
   </div>
 
-<script>
-    var geocoder;
-    var map;
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 49.265, lng: -123.1},
-        zoom: 14,
-        minZoom: 14,
-        maxZoom: 18
-      });
-      var geocoder = new google.maps.Geocoder();
 
-      var coordinates = {};
-
-}
-
-</script>
 
   <div class="sidebar thin">
     <button type="button" data-toggle="modal" data-target=".report-an-incident">Report an Incident</button>
