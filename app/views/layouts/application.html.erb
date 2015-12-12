@@ -14,19 +14,44 @@
           minZoom: 14,
           maxZoom: 18
         });
-        var geocoder = new google.maps.Geocoder();
 
+        
+
+        var geocoder = new google.maps.Geocoder();
         var coordinates = {};
+        var marker;
+
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: getPoints(),
+          map: map
+        });
+
+        function toggleHeatmap() {
+          heatmap.setMap(heatmap.getMap() ? null : map);
+        }
+
+        function getPoints() {
+          return [
+            new google.maps.LatLng(49.265, -123.178),
+            new google.maps.LatLng(49.264, -123.871),
+            new google.maps.LatLng(49.269, -123.5431),
+            new google.maps.LatLng(49.223, -123.341),
+            new google.maps.LatLng(49.256, -123.1343),
+            new google.maps.LatLng(49.256, -123.1),
+            new google.maps.LatLng(49.256, -123.11)
+          ]
+        }
       }
 
   </script>
+  <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
   <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
   </script>
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
@@ -42,7 +67,7 @@
                 <div class="row">
                 <div class='input-group date form-group' id='datepicker'>
                   <%= incident.date_field :reported_on, as: :date_picker %>
-                  
+
                 </div>
                 <div class='input-group time form-group' id='timepicker'>
                   <%= incident.time_field :reported_at, as: :time_picker %>
@@ -100,8 +125,6 @@
     </div>
   </div>
 
-
-
   <div class="sidebar thin">
     <button type="button" data-toggle="modal" data-target=".report-an-incident">Report an Incident</button>
     <hr>
@@ -118,8 +141,8 @@
     <hr>
     <p>Social Media Icons</p>
     <p>About Us/Contact Us</p>
-
   </div>
+
     <%= yield %>
 </body>
 </html>

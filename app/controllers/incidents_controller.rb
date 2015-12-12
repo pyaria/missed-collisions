@@ -3,11 +3,15 @@ class IncidentsController < ApplicationController
 
   def index
     @incident = Incident.new
+    @incidents = Incident.all
+    respond_to do |format|
+      format.html {render}
+      format.json {render json: @incidents.to_json }
+    end
   end
 
   def new
     @incident = Incident.new
-    @YOU = ["car", "bike", "pedestrian"]
   end
 
   def create
