@@ -3,7 +3,7 @@
 <head>
   <title>MissedCollisions</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/oj.mustache/0.7.2/oj.mustache.min.js"></script>
+  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <script>
       var geocoder;
@@ -17,7 +17,11 @@
         });
 
         var geocoder = new google.maps.Geocoder();
-        var marker;
+        var marker = new google.maps.MarkerImage('/assets/transparent.png',
+                                          new google.maps.Size(15, 15),
+                                          new google.maps.Point(0, 0),
+                                          new google.maps.Point(0, 0),
+                                          new google.maps.Size(0, 0));
 
         function getPoints() {
           return $.ajax({
@@ -30,17 +34,52 @@
 
         promise.success(function(data){
           var dataPoints = [];
+          var markers = [];
           for (var i = 0; i < data.length; i ++) {
-            dataPoints.push(new google.maps.LatLng(parseFloat(data[i].latitude), parseFloat(data[i].longitude)));
+            var latitude = parseFloat(data[i].latitude);
+            var longitude = parseFloat(data[i].longitude);
+            dataPoints.push(new google.maps.LatLng(latitude, longitude));
+            var invisibleMarker = new google.maps.Marker({
+                          position: {lat: latitude, lng: longitude},
+                          map: map,
+                          icon: marker
+            })
+            var time = data[i].reported_at.split("T");
+            var formattedTime = time[1].split(":");
+            var contentString = "<div id='heading'><p><strong>" + data[i].you +
+                                "</strong> vs <strong>" + data[i].them +
+                                "</strong></p></div><div id='inner'><p>" +
+                                data[i].incident_type + "</p><p>" +
+                                data[i].reported_on + " " +
+                                formattedTime[0] + ":" + formattedTime[1] +
+                                "</p></div>"
+            attachInfowindow(invisibleMarker, contentString);
+            // var infowindow = new google.maps.InfoWindow({
+            //   content: contentString
+            // })
+            // invisibleMarker.addListener('mouseover', function(){
+            //   infowindow.open(invisibleMarker.get('map'), invisibleMarker);
+            // })
+          }
+          function attachInfowindow(marker, contentString) {
+            var infowindow = new google.maps.InfoWindow({
+              content: contentString
+            })
+            marker.addListener('mouseover', function(){
+              infowindow.open(marker.get('map'), marker);
+            })
+            marker.addListener('mouseout', function(){
+              infowindow.close(marker.get('map'), marker);
+            })
           }
           heatmap = new google.maps.visualization.HeatmapLayer({
             data: dataPoints,
             map: map
-          })
+          });
           function toggleHeatmap() {
             heatmap.setMap(heatmap.getMap() ? null : map);
-          }
-        })
+          };
+        });
 
       }
 
