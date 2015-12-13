@@ -16,8 +16,6 @@ $(document).on('ready', function() {
   $('.modal').modal('show').fadeIn();
 
   $('form').submit(function(event) {
-    $('#incident_latitude').val(incidentLatLng.lat);
-    $('#incident_longitude').val(incidentLatLng.lng);
     event.preventDefault;
     setTimeout(function(){
       for (var i = 0; i < inputs.length; i++) {
@@ -55,6 +53,8 @@ $(document).on('ready', function() {
           marker.setPosition(coordinates);
           incidentLatLng = coordinates;
           geocodeLatLng(geocoder, map, infowindow);
+          $('#incident_latitude').val(incidentLatLng.lat);
+          $('#incident_longitude').val(incidentLatLng.lng);
         } else {
           marker =  new google.maps.Marker({
                     position: coordinates,
@@ -65,11 +65,15 @@ $(document).on('ready', function() {
         incidentLatLng = coordinates;
         markers.push(marker);
         geocodeLatLng(geocoder, map, infowindow);
+        $('#incident_latitude').val(incidentLatLng.lat);
+        $('#incident_longitude').val(incidentLatLng.lng);
         }
         google.maps.event.addListener(marker, 'dragend', function(event) {
-          console.log(event.latLng.lat());
           incidentLatLng = coordinates;
+          console.log(incidentLatLng.lat, incidentLatLng.lng);
           geocodeLatLng(geocoder, map, infowindow);
+          $('#incident_latitude').val(incidentLatLng.lat);
+          $('#incident_longitude').val(incidentLatLng.lng);
         });
       }, 200);
     });
@@ -83,13 +87,11 @@ $(document).on('ready', function() {
     $('#map-for-mapping').addClass('invisible');
     $('#incident-details').removeClass('invisible');
     $('#submit-button input').removeClass('invisible');
-    // geocodeLatLng(geocoder, map, infowindow);
   });
   $('#incident_them').focus(function() {
     $('#map-for-mapping').addClass('invisible');
     $('#incident-details').removeClass('invisible');
     $('#submit-button input').removeClass('invisible');
-    // geocodeLatLng(geocoder, map, infowindow);
   });
 
   $('input#incident_incident_type').on('keypress', function(event) {
@@ -107,9 +109,8 @@ $(document).on('ready', function() {
     var searchValue = $(this).val();
     setTimeout(function(){
       if(searchValue == $('#incident_location').val()
-                          && searchValue != null
-                          && searchValue != "") {
-        console.log("geocode");
+                        && searchValue != null
+                        && searchValue != "") {
         geocodeAddress(new google.maps.Geocoder(), map);
       }
     },300);
@@ -117,10 +118,7 @@ $(document).on('ready', function() {
       var address = $('#incident_location').val();
       geocoder.geocode({address: address}, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
-        console.log("results")
           var reader = results[0].formatted_address.split(", ");
-          console.log(results[0].geometry.location.lat()); // RETURNS LAT
-          console.log(reader[0]);
           $('#location p').replaceWith("<p>Did you mean " + reader[0] +
                           "? If not, please find your location on map</p>");
         }

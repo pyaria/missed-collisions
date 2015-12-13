@@ -12,6 +12,11 @@ class IncidentsController < ApplicationController
 
   def new
     @incident = Incident.new
+    @incidents = Incident.all
+    respond_to do |format|
+      format.html {render}
+      format.json {render json: @incidents.to_json }
+    end
   end
 
   def create

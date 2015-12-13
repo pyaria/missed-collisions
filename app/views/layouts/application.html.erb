@@ -3,44 +3,45 @@
 <head>
   <title>MissedCollisions</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/oj.mustache/0.7.2/oj.mustache.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <script>
       var geocoder;
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 49.265, lng: -123.1},
+          center: new google.maps.LatLng(49.265, -123.1),
           zoom: 14,
-          minZoom: 14,
+          minZoom: 10,
           maxZoom: 18
         });
 
-        
-
         var geocoder = new google.maps.Geocoder();
-        var coordinates = {};
         var marker;
 
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getPoints(),
-          map: map
-        });
-
-        function toggleHeatmap() {
-          heatmap.setMap(heatmap.getMap() ? null : map);
-        }
-
         function getPoints() {
-          return [
-            new google.maps.LatLng(49.265, -123.178),
-            new google.maps.LatLng(49.264, -123.871),
-            new google.maps.LatLng(49.269, -123.5431),
-            new google.maps.LatLng(49.223, -123.341),
-            new google.maps.LatLng(49.256, -123.1343),
-            new google.maps.LatLng(49.256, -123.1),
-            new google.maps.LatLng(49.256, -123.11)
-          ]
+          return $.ajax({
+            method: 'GET',
+            url: 'http://localhost:3000/incidents/new.json'
+          });
         }
+
+        var promise = getPoints();
+
+        promise.success(function(data){
+          var dataPoints = [];
+          for (var i = 0; i < data.length; i ++) {
+            dataPoints.push(new google.maps.LatLng(parseFloat(data[i].latitude), parseFloat(data[i].longitude)));
+          }
+          heatmap = new google.maps.visualization.HeatmapLayer({
+            data: dataPoints,
+            map: map
+          })
+          function toggleHeatmap() {
+            heatmap.setMap(heatmap.getMap() ? null : map);
+          }
+        })
+
       }
 
   </script>
