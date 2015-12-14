@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>MissedCollisions</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script> -->
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <script>
       var geocoder;
@@ -18,10 +18,9 @@
 
         var geocoder = new google.maps.Geocoder();
         var marker = new google.maps.MarkerImage('/assets/transparent.png',
-                                          new google.maps.Size(15, 15),
+                                          new google.maps.Size(16, 16),
                                           new google.maps.Point(0, 0),
-                                          new google.maps.Point(0, 0),
-                                          new google.maps.Size(0, 0));
+                                          new google.maps.Point(8, 8));
 
         function getPoints() {
           return $.ajax({
@@ -54,12 +53,6 @@
                                 formattedTime[0] + ":" + formattedTime[1] +
                                 "</p></div>"
             attachInfowindow(invisibleMarker, contentString);
-            // var infowindow = new google.maps.InfoWindow({
-            //   content: contentString
-            // })
-            // invisibleMarker.addListener('mouseover', function(){
-            //   infowindow.open(invisibleMarker.get('map'), invisibleMarker);
-            // })
           }
           function attachInfowindow(marker, contentString) {
             var infowindow = new google.maps.InfoWindow({
@@ -81,18 +74,25 @@
           };
         });
 
+        // map.addListener('click', function(){
+        //   promise.success(function(data) {
+        //     console.log(data);
+        //   })
+        //
+        // })
+
       }
 
   </script>
-  <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+  <!-- <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet"> -->
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
-  <script async defer
+  <!-- <script async defer
       src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
-  </script>
+  </script> -->
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -166,13 +166,28 @@
   </div>
 
   <div class="sidebar thin">
-    <button type="button" data-toggle="modal" data-target=".report-an-incident">Report an Incident</button>
+    <button type="button" data-toggle="modal" data-target=".report-an-incident" id="report-an-accident">Report an Incident</button>
     <hr>
-    <p>Filter Map</p>
-    <p>Car</p>
-    <p>Bike</p>
-    <p>Pedestrian</p>
-    <p>Road Hazard</p>
+    <p class="heading">Filter Map Results</p>
+    <div id="car" class="menu">
+      <button class="menu blue" id="you-car"></button>
+      <p class="menu">Car</p>
+      <button class="menu blue float-right" id="them-car"></button>
+    </div>
+    <div id="bike" class="menu">
+      <button class="menu blue" id="you-bike"></button>
+      <p class="menu">Bike</p>
+      <button class="menu blue float-right" id="them-bike"></button>
+    </div>
+    <div id="pedestrian" class="menu">
+      <button class="menu blue" id="you-pedestrian"></button>
+      <p class="menu">Pedestrian</p>
+      <button class="menu blue float-right" id="them-pedestrian"></button>
+    </div>
+    <div id="road_hazard" class="menu">
+      <p class="menu">Road Hazard</p>
+      <button class="menu blue float-right" id="them-road-hazard"></button>
+    </div>
     <hr>
     <p>Hour Scale</p>
     <p>Month Scale</p>

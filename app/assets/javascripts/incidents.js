@@ -15,6 +15,11 @@ $(document).on('ready', function() {
 
   $('.modal').modal('show').fadeIn();
 
+  $('.menu').click(function(event){
+    $(this).toggleClass('blue');
+    event.stopPropagation();
+  })
+
   $('form').submit(function(event) {
     event.preventDefault;
     setTimeout(function(){
