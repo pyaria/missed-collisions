@@ -12,7 +12,18 @@ class IncidentsController < ApplicationController
 
   def new
     @incident = Incident.new
-    @incidents = Incident.all
+    if params.length == 3
+      @incidents = Incident.all
+    else
+      filters = []
+      params.each { |k, v| filters.push(k) if v == "true" }
+      search_terms = filters.map { |x| x.split("_") }
+      sql_search_term = []
+      search_terms.each do |array|
+        sql_search_term.push(array[0] + " = '" + array[1] + "'")
+      end
+      @incidents = Incident.where(sql_search_term.join(" OR "))
+    end
     respond_to do |format|
       format.html {render}
       format.json {render json: @incidents.to_json }

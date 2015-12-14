@@ -54,8 +54,8 @@ hr {
 }
 
 button {
-  margin: 9px;
-  padding: 6px;
+  margin: 10px;
+  padding: 10px;
 }
 
 #incident {
@@ -104,9 +104,12 @@ p {
 #submit-button {
   transition: 5s;
 }
+
 .menu {
   display: inline-flex;
+  transition: 1s;
 }
+
 #you-car, #them-car, #you-bike, #them-bike, #you-pedestrian, #them-pedestrian,
   #them-road-hazard {
   display: inline;
@@ -116,4 +119,13 @@ p {
 
 button.blue {
   background-color: blue;
+}
+
+.filter {
+  width: 50px;
+  height: 50px;
+}
+
+#road-hazard {
+  width: 92px;
 }

@@ -15,6 +15,84 @@ $(document).on('ready', function() {
 
   $('.modal').modal('show').fadeIn();
 
+  var youCar = false;
+
+  $('button.menu').click(function(){
+    if ($(this).attr('data-value') == "false") {
+      $(this).attr('data-value', "true")
+    } else {
+      $(this).attr('data-value', "false")
+    }
+  });
+
+  $('button#heading').click(function(){
+    $.ajax({
+      method: "GET",
+      url: "http://localhost:3000/incidents/new.json",
+      data: { you_car: $('#you-car').attr('data-value'),
+              you_bike: $('#you-bike').attr('data-value'),
+              you_pedestrian: $('#you-pedestrian').attr('data-value'),
+              them_car: $('#them-car').attr('data-value'),
+              them_bike: $('#them-bike').attr('data-value'),
+              them_pedestrian: $('#them-pedestrian').attr('data-value'),
+              them_road_hazard: $('#them-road-hazard').attr('data-value')
+            },
+      error: function() { alert("Please try again!") },
+      success: function(data){
+        var marker = new google.maps.MarkerImage('/assets/transparent.png',
+                                          new google.maps.Size(16, 16),
+                                          new google.maps.Point(0, 0),
+                                          new google.maps.Point(8, 8));
+        console.log(data)
+        var dataPoints = [];
+        var markers = [];
+        for (var i = 0; i < data.length; i ++) {
+          var latitude = parseFloat(data[i].latitude);
+          var longitude = parseFloat(data[i].longitude);
+          dataPoints.push(new google.maps.LatLng(latitude, longitude));
+          var invisibleMarker = new google.maps.Marker({
+                        position: {lat: latitude, lng: longitude},
+                        map: map,
+                        icon: marker
+          })
+          var time = data[i].reported_at.split("T");
+          var formattedTime = time[1].split(":");
+          var contentString = "<div id='heading'><p><strong>" + data[i].you +
+                              "</strong> vs <strong>" + data[i].them +
+                              "</strong></p></div><div id='inner'><p>" +
+                              data[i].incident_type + "</p><p>" +
+                              data[i].reported_on + " " +
+                              formattedTime[0] + ":" + formattedTime[1] +
+                              "</p></div>"
+          attachInfowindow(invisibleMarker, contentString);
+        }
+        function attachInfowindow(marker, contentString) {
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          })
+          marker.addListener('mouseover', function(){
+            infowindow.open(marker.get('map'), marker);
+          })
+          marker.addListener('mouseout', function(){
+            infowindow.close(marker.get('map'), marker);
+          })
+        }
+        heatmap.setMap(null);
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: dataPoints,
+          map: map
+        });
+        function toggleHeatmap() {
+          heatmap.setMap(heatmap.getMap() ? null : map);
+        };
+        console.log(heatmap);
+        console.log(dataPoints);
+        console.log(markers);
+      }
+    })
+
+  })
+
   $('.menu').click(function(event){
     $(this).toggleClass('blue');
     event.stopPropagation();
@@ -108,7 +186,11 @@ $(document).on('ready', function() {
 
   $('.sidebar').hover(function() {
     $(this).toggleClass("wide");
+    setTimeout(function(){
+      $('.float-right').toggleClass('invisible').fadeIn(500);
+  }, 500)
   });
+
 
   $('#incident_location').on('keyup',function() {
     var searchValue = $(this).val();

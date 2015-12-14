@@ -2,12 +2,13 @@
 <html>
 <head>
   <title>MissedCollisions</title>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <script>
       var geocoder;
       var map;
+      var markers = [];
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: new google.maps.LatLng(49.265, -123.1),
@@ -31,9 +32,9 @@
 
         var promise = getPoints();
 
+
         promise.success(function(data){
           var dataPoints = [];
-          var markers = [];
           for (var i = 0; i < data.length; i ++) {
             var latitude = parseFloat(data[i].latitude);
             var longitude = parseFloat(data[i].longitude);
@@ -54,6 +55,7 @@
                                 "</p></div>"
             attachInfowindow(invisibleMarker, contentString);
           }
+
           function attachInfowindow(marker, contentString) {
             var infowindow = new google.maps.InfoWindow({
               content: contentString
@@ -64,35 +66,32 @@
             marker.addListener('mouseout', function(){
               infowindow.close(marker.get('map'), marker);
             })
+            markers.push(invisibleMarker);
           }
-          heatmap = new google.maps.visualization.HeatmapLayer({
-            data: dataPoints,
-            map: map
-          });
+          function heatmap(){
+            new google.maps.visualization.HeatmapLayer({
+              data: dataPoints,
+              map: map
+            });
+          }
+          heatmap();
           function toggleHeatmap() {
             heatmap.setMap(heatmap.getMap() ? null : map);
           };
         });
 
-        // map.addListener('click', function(){
-        //   promise.success(function(data) {
-        //     console.log(data);
-        //   })
-        //
-        // })
-
       }
 
   </script>
-  <!-- <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet"> -->
+  <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
-  <!-- <script async defer
+  <script async defer
       src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
-  </script> -->
+  </script>
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -165,28 +164,33 @@
     </div>
   </div>
 
-  <div class="sidebar thin">
-    <button type="button" data-toggle="modal" data-target=".report-an-incident" id="report-an-accident">Report an Incident</button>
+  <div class="sidebar thin flex">
+    <button type="button" data-toggle="modal" data-target=".report-an-incident"
+          id="report-an-accident">Report an Incident</button>
     <hr>
-    <p class="heading">Filter Map Results</p>
+    <button id="heading">Filter Map Results</button>
     <div id="car" class="menu">
-      <button class="menu blue" id="you-car"></button>
-      <p class="menu">Car</p>
-      <button class="menu blue float-right" id="them-car"></button>
+      <button class="menu" id="you-car" data-value="false"></button>
+      <img src="/assets/car.png" class="filter">
+      <button class="menu invisible float-right" id="them-car" data-value="false">
+      </button>
     </div>
     <div id="bike" class="menu">
-      <button class="menu blue" id="you-bike"></button>
-      <p class="menu">Bike</p>
-      <button class="menu blue float-right" id="them-bike"></button>
+      <button class="menu" id="you-bike" data-value="false"></button>
+      <img src="/assets/bike.png" class="filter">
+      <button class="menu invisible float-right" id="them-bike" data-value="false">
+      </button>
     </div>
     <div id="pedestrian" class="menu">
-      <button class="menu blue" id="you-pedestrian"></button>
-      <p class="menu">Pedestrian</p>
-      <button class="menu blue float-right" id="them-pedestrian"></button>
+      <button class="menu" id="you-pedestrian" data-value="false"></button>
+      <img src="/assets/pedestrian.png" class="filter">
+      <button class="menu invisible float-right" id="them-pedestrian" data-value="false">
+      </button>
     </div>
     <div id="road_hazard" class="menu">
-      <p class="menu">Road Hazard</p>
-      <button class="menu blue float-right" id="them-road-hazard"></button>
+      <img src="/assets/road-hazard.png" class="filter" id="road-hazard">
+      <button class="menu invisible float-right" id="them-road-hazard" data-value="false">
+      </button>
     </div>
     <hr>
     <p>Hour Scale</p>
@@ -199,5 +203,6 @@
   </div>
 
     <%= yield %>
+
 </body>
 </html>
