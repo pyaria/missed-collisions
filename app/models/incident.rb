@@ -18,6 +18,10 @@ class Incident < ActiveRecord::Base
   YOU = ["car", "bike", "pedestrian"]
   THEM = ["car", "bike", "pedestrian", "road hazard"]
 
+  def self.incident_month
+    select("incidents.*, (reported_on) as month")
+    
+  end
 
   def phone_email_which
     if phone_email.present?

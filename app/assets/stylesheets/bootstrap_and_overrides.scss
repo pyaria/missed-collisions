@@ -16,8 +16,20 @@ img {
   height: 100%;
 }
 
+.wide-button {
+  width: 100%;
+  display: block;
+  transition: 2s;
+
+}
+
 hr {
   margin: 2px;
+}
+
+img.social {
+  width: 25px;
+  height: 25px;
 }
 
 #map {
@@ -111,7 +123,7 @@ p {
 }
 
 #you-car, #them-car, #you-bike, #them-bike, #you-pedestrian, #them-pedestrian,
-  #them-road-hazard {
+  #them-road-hazard, #google {
   display: inline;
   height: 15px;
   width: 15px;
@@ -119,6 +131,14 @@ p {
 
 button.blue {
   background-color: blue;
+}
+
+#stats {
+
+}
+
+p.scale {
+  text-align: center;
 }
 
 .filter {

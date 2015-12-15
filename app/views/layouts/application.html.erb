@@ -242,11 +242,22 @@
         step: 1,
         values: [0, 24],
         slide: function(event, ui) {
-          $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+          console.log(ui.values);
         }
       });
-      $( "#amount" ).val( "$" + $( "#hour-scale" ).slider( "values", 0 ) +
-        " - $" + $( "#hour-scale" ).slider( "values", 1 ) );
+    });
+    $(function() {
+      $( "#month-scale" ).slider({
+        range: true,
+        min: 1,
+        orientation: "horizontal",
+        max: 12,
+        step: 1,
+        values: [0, 12],
+        stop: function(event, ui) {
+          console.log(ui.values);
+        }
+      });
     });
   </script>
 
@@ -256,7 +267,7 @@
     <button type="button" data-toggle="modal" data-target=".report-an-incident"
           id="report-an-accident">Report an Incident</button>
     <hr>
-    <button id="heading">Filter Map Results</button>
+    <button id="heading">Filter by People</button>
     <div id="car" class="menu">
       <button class="menu" id="you-car" data-value="false"></button>
       <img src="/assets/car.png" class="filter">
@@ -281,15 +292,25 @@
       </button>
     </div>
     <hr>
-    <label for="hours">Hour Scale</label>
-    <div id="hour-scale"></div>
+    <div id="time-scale">
+      <button id="hour">Filter by Day/Time</button>
+      <p class="scale"><strong>Hours</strong></p>
+      <div id="hour-scale"></div>
+      <p class="scale"><strong>Months</strong></p>
+      <div id="month-scale"></div>
+    </div>
+    <div id="stats">
+      <p><strong>Stats <a href="#"><img class="filter" src="/assets/stats.png"></a></strong></p>
 
-    <p>Month Scale</p>
+    </div>
     <hr>
-    <p>Stats</p>
-    <hr>
-    <p>Social Media Icons</p>
-    <p>About Us/Contact Us</p>
+    <div id="social-media">
+    <a href="#"><img class="social" src="/assets/facebook.png"></a>
+    <a href="#"><img class="social" src="/assets/twitter.png"></a>
+    <a href="#"><img class="social" src="/assets/instagram.png"></a>
+    <a href="#"><img class="social invisible menu float-right" id="google" src="/assets/google.png"></a>
+    </div>
+    <button class="btn-block" id="us">About Us</button>
   </div>
   <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">

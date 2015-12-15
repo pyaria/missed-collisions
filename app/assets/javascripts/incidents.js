@@ -25,7 +25,7 @@ $(document).on('ready', function() {
     }
   });
 
-  
+
 
   $('.menu').click(function(event){
     $(this).toggleClass('blue');
