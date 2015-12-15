@@ -4,6 +4,7 @@
   <title>MissedCollisions</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <script>
       var geocoder;
@@ -34,7 +35,6 @@
 
         function addMarkers(marker){
           markers.push(marker)
-          console.log(markers);
         };
 
 
@@ -160,10 +160,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
-  <script async defer
-      src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
-  </script>
 
    <!-- MODAL FOR SUBMITTING A REPORT -->
   <div class="modal fade report-an-incident" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -236,6 +232,26 @@
     </div>
   </div>
 
+  <script>
+    $(function() {
+      $( "#hour-scale" ).slider({
+        range: true,
+        min: 0,
+        orientation: "horizontal",
+        max: 24,
+        step: 1,
+        values: [0, 24],
+        slide: function(event, ui) {
+          $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+        }
+      });
+      $( "#amount" ).val( "$" + $( "#hour-scale" ).slider( "values", 0 ) +
+        " - $" + $( "#hour-scale" ).slider( "values", 1 ) );
+    });
+  </script>
+
+
+
   <div class="sidebar thin flex">
     <button type="button" data-toggle="modal" data-target=".report-an-incident"
           id="report-an-accident">Report an Incident</button>
@@ -265,7 +281,9 @@
       </button>
     </div>
     <hr>
-    <p>Hour Scale</p>
+    <label for="hours">Hour Scale</label>
+    <div id="hour-scale"></div>
+
     <p>Month Scale</p>
     <hr>
     <p>Stats</p>
@@ -273,6 +291,10 @@
     <p>Social Media Icons</p>
     <p>About Us/Contact Us</p>
   </div>
+  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
+  </script>
+
 
     <%= yield %>
 
