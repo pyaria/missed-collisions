@@ -152,6 +152,9 @@
           })
         })
 
+
+
+
       }
 
   </script>
@@ -172,12 +175,15 @@
               <div class="form-inline">
                 <h1>Submit a Report!</h1>
                 <div class="row">
-                <div class='input-group date form-group' id='datepicker'>
-                  <%= incident.date_field :reported_on, as: :date_picker %>
-
+                <div class='input-group date form-group' >
+                  <%= incident.date_field :reported_on,
+                                          placeholder: "Date",
+                                          class: "form-control" %>
                 </div>
                 <div class='input-group time form-group' id='timepicker'>
-                  <%= incident.time_field :reported_at, as: :time_picker %>
+                  <%= incident.time_field :reported_at,
+                                          placeholder: "Time",
+                                          class: "form-control" %>
                 </div>
               </div>
               </div>
@@ -185,6 +191,33 @@
                 <%= incident.label :phone_email %>
                 <%= incident.text_field :phone_email,
                                         placeholder: "Phone or Email (optional)",
+                                        class: "form-control" %>
+              </div>
+              <div class="you">
+                <%= incident.label :you %> &ensp;
+                <%= incident.radio_button :you, "car" %>
+                <%= incident.label :you, "car", value: "car" %> |
+                <%= incident.radio_button :you, "bike" %>
+                <%= incident.label :you, "bike", value: "bike" %> |
+                <%= incident.radio_button :you, "pedestrian" %>
+                <%= incident.label :you, "pedestrian", value: "pedestrian" %>
+
+              </div>
+              <div>
+                <%= incident.label :them %>
+                <%= incident.radio_button :them, "car" %>
+                <%= incident.label :them, "car", value: "car" %> |
+                <%= incident.radio_button :them, "bike" %>
+                <%= incident.label :them, "bike", value: "bike" %> |
+                <%= incident.radio_button :them, "pedestrian" %>
+                <%= incident.label :them, "pedestrian", value: "pedestrian" %> |
+                <%= incident.radio_button :them, "road hazard" %>
+                <%= incident.label :them, "road hazard", value: "road hazard" %>
+              </div>
+              <div class="form-inline">
+                <%= incident.label :incident_type %>
+                <%= incident.text_field :incident_type,
+                                        placeholder: "Eg. ran a red light, aggressive, distracted, ...",
                                         class: "form-control" %>
               </div>
               <div class="form-inline" id="location">
@@ -197,20 +230,10 @@
                 <button id="pin-on-map">Find on Map</button>
                 <p></p>
               </div>
-              <div>
+              <div class="form-inline">
                 <%= incident.label :license %>
                 <%= incident.text_field :license,
                                         placeholder: "License number (optional)",
-                                        class: "form-control" %>
-              </div>
-              <div>
-                <%= incident.select :you, Incident::YOU, { prompt: "YOU" } %>
-                <%= incident.select :them, Incident::THEM, { prompt: "THEM" } %>
-              </div>
-              <div>
-                <%= incident.label :incident_type %>
-                <%= incident.text_field :incident_type,
-                                        placeholder: "Eg. ran a red light, aggressive, distracted, ...",
                                         class: "form-control" %>
               </div>
             </div>
@@ -231,36 +254,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    $(function() {
-      $( "#hour-scale" ).slider({
-        range: true,
-        min: 0,
-        orientation: "horizontal",
-        max: 24,
-        step: 1,
-        values: [0, 24],
-        slide: function(event, ui) {
-          console.log(ui.values);
-        }
-      });
-    });
-    $(function() {
-      $( "#month-scale" ).slider({
-        range: true,
-        min: 1,
-        orientation: "horizontal",
-        max: 12,
-        step: 1,
-        values: [0, 12],
-        stop: function(event, ui) {
-          console.log(ui.values);
-        }
-      });
-    });
-  </script>
-
 
 
   <div class="sidebar thin flex">
@@ -293,7 +286,7 @@
     </div>
     <hr>
     <div id="time-scale">
-      <button id="hour">Filter by Day/Time</button>
+      <button id="time">Filter by Day/Time</button>
       <p class="scale"><strong>Hours</strong></p>
       <div id="hour-scale"></div>
       <p class="scale"><strong>Months</strong></p>
@@ -312,9 +305,114 @@
     <a href="#"><img class="social invisible menu float-right" id="google" src="/assets/google.png"></a>
     </div>
   </div>
-  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
-  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
+
+  <script>
+
+  </script>
+  <script>
+
+    $(function() {
+      $( "#hour-scale" ).slider({
+        range: true,
+        min: 0,
+        orientation: "horizontal",
+        max: 24,
+        step: 1,
+        values: [0, 24],
+        slide: function(event, ui) {
+          console.log(ui.values);
+        }
+      });
+    });
+    $(function() {
+      $( "#month-scale" ).slider({
+        range: true,
+        min: 1,
+        orientation: "horizontal",
+        max: 12,
+        step: 1,
+        values: [0, 12],
+        stop: function(event, ui) {
+          console.log(ui.values);
+        }
+      });
+    });
+  </script>
+
+  <!-- <script>
+  $('button#time').click(function(){
+    var hours = $('#hour-scale').slider('option', "values");
+    var months = $('#month-scale').slider('option', "values");
+    console.log(hours, months);
+    $.ajax({
+      method: "GET",
+      url: "http://localhost:3000/incidents/new.json",
+      data: { hoursStart: hours[0],
+              hoursEnd: hours[1],
+              monthsStart: months[0],
+              monthsEnd: months[1]
+            },
+      error: function() { alert("Please try again!") },
+      success: function(data){
+        var marker = new google.maps.MarkerImage('/assets/transparent.png',
+                                          new google.maps.Size(16, 16),
+                                          new google.maps.Point(0, 0),
+                                          new google.maps.Point(8, 8));
+        console.log(data);
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null)
+        };
+        markers = [];
+
+        var dataPoints = [];
+        for (var i = 0; i < data.length; i ++) {
+          var latitude = parseFloat(data[i].latitude);
+          var longitude = parseFloat(data[i].longitude);
+          dataPoints.push(new google.maps.LatLng(latitude, longitude));
+          var invisibleMarker = new google.maps.Marker({
+                        position: {lat: latitude, lng: longitude},
+                        map: map,
+                        icon: marker
+          })
+          var time = data[i].reported_at.split("T");
+          var formattedTime = time[1].split(":");
+          var contentString = "<div id='heading'><p><strong>" + data[i].you +
+                              "</strong> vs <strong>" + data[i].them +
+                              "</strong></p></div><div id='inner'><p>" +
+                              data[i].incident_type + "</p><p>" +
+                              data[i].reported_on + " " +
+                              formattedTime[0] + ":" + formattedTime[1] +
+                              "</p></div>"
+          attachInfowindow(invisibleMarker, contentString);
+        }
+        function attachInfowindow(marker, contentString) {
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          })
+          marker.addListener('mouseover', function(){
+            infowindow.open(marker.get('map'), marker);
+          })
+          marker.addListener('mouseout', function(){
+            infowindow.close(marker.get('map'), marker);
+          })
+          addMarkers(marker);
+        }
+        heatmap.setMap(null);
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: dataPoints,
+          map: map
+        });
+        function toggleHeatmap() {
+          heatmap.setMap(heatmap.getMap() ? null : map);
+        };
+      }
+    })
+  })
   </script> -->
+  <!-- ASYNCHRONOUS LOADING OF GOOGLE MAPS -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyA4JPuZMXXvaQcoRbFbQpsUtGij2cHl1wc&callback=initMap">
+  </script>
+
 
 
     <%= yield %>

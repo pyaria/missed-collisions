@@ -16,9 +16,9 @@ gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'validates_timeliness', '~> 3.0'
 gem "bootstrap-sass"
-gem 'momentjs-rails', '>= 2.9.0'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'judge-simple_form'
+gem 'bootstrap-datepicker-rails'
+gem 'bootstrap-timepicker-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

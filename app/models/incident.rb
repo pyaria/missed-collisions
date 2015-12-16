@@ -1,7 +1,6 @@
 class Incident < ActiveRecord::Base
   validates :reported_on, presence: true
   validates_date :reported_at, :on_or_before => :today
-  validates :reported_at, presence: true
   validates :location, presence: true
   validates :latitude, presence: true
   validates :longitude, presence: true
@@ -20,7 +19,7 @@ class Incident < ActiveRecord::Base
 
   def self.incident_month
     select("incidents.*, (reported_on) as month")
-    
+
   end
 
   def phone_email_which

@@ -44,11 +44,13 @@ GEM
     awesome_print (1.6.1)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-datepicker-rails (1.5.0)
+      railties (>= 3.0)
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
-    bootstrap3-datetimepicker-rails (4.17.37)
-      momentjs-rails (>= 2.8.1)
+    bootstrap-timepicker-rails (0.1.3)
+      railties (>= 3.0)
     builder (3.2.2)
     byebug (8.2.1)
     capybara (2.5.0)
@@ -109,8 +111,6 @@ GEM
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
-    momentjs-rails (2.10.6)
-      railties (>= 3.1)
     multi_json (1.11.2)
     nokogiri (1.6.7)
       mini_portile2 (~> 2.0.0.rc2)
@@ -220,8 +220,9 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bootstrap-datepicker-rails
   bootstrap-sass
-  bootstrap3-datetimepicker-rails (~> 4.17.37)
+  bootstrap-timepicker-rails
   byebug
   capybara
   coffee-rails (~> 4.1.0)
@@ -236,7 +237,6 @@ DEPENDENCIES
   jquery-rails
   judge-simple_form
   launchy
-  momentjs-rails (>= 2.9.0)
   nyan-cat-formatter
   pg
   rails (= 4.2.4)

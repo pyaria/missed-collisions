@@ -15,7 +15,7 @@ $(document).on('ready', function() {
 
   $('.modal').modal('show').fadeIn();
 
-  var youCar = false;
+  $('.timepicker').timepicker();
 
   $('button.menu').click(function(){
     if ($(this).attr('data-value') == "false") {
@@ -24,8 +24,6 @@ $(document).on('ready', function() {
       $(this).attr('data-value', "false")
     }
   });
-
-
 
   $('.menu').click(function(event){
     $(this).toggleClass('blue');
@@ -44,6 +42,16 @@ $(document).on('ready', function() {
 
   $('#pin-on-map').click(function(event) {
     var bikeImage = new google.maps.MarkerImage('/assets/bike.png',
+                                      new google.maps.Size(32, 35),
+                                      new google.maps.Point(0, 0),
+                                      new google.maps.Point(32 / 2, 35),
+                                      new google.maps.Size(32, 35));
+    var carImage = new google.maps.MarkerImage('/assets/car.png',
+                                      new google.maps.Size(32, 35),
+                                      new google.maps.Point(0, 0),
+                                      new google.maps.Point(32 / 2, 35),
+                                      new google.maps.Size(32, 35));
+    var pedestrianImage = new google.maps.MarkerImage('/assets/pedestrian.png',
                                       new google.maps.Size(32, 35),
                                       new google.maps.Point(0, 0),
                                       new google.maps.Point(32 / 2, 35),
@@ -73,12 +81,28 @@ $(document).on('ready', function() {
           $('#incident_latitude').val(incidentLatLng.lat);
           $('#incident_longitude').val(incidentLatLng.lng);
         } else {
+          if ($('input[name="incident[you]"]:checked', '#incident').val() === 'bike') {
           marker =  new google.maps.Marker({
                     position: coordinates,
                     map: map,
                     icon: bikeImage,
                     draggable: true
                   })
+        } else if ($('input[name="incident[you]"]:checked', '#incident').val() === 'car') {
+          marker =  new google.maps.Marker({
+                    position: coordinates,
+                    map: map,
+                    icon: carImage,
+                    draggable: true
+                  })
+        } else {
+          marker =  new google.maps.Marker({
+                    position: coordinates,
+                    map: map,
+                    icon: pedestrianImage,
+                    draggable: true
+                  })
+        }
         incidentLatLng = coordinates;
         markers.push(marker);
         geocodeLatLng(geocoder, map, infowindow);
@@ -100,12 +124,27 @@ $(document).on('ready', function() {
 
   });
 
-  $('#incident_you').focus(function() {
+  $('input[name="incident[you]"]').focus(function() {
     $('#map-for-mapping').addClass('invisible');
     $('#incident-details').removeClass('invisible');
     $('#submit-button input').removeClass('invisible');
   });
-  $('#incident_them').focus(function() {
+  $('input[name="incident[them]"]').focus(function() {
+    $('#map-for-mapping').addClass('invisible');
+    $('#incident-details').removeClass('invisible');
+    $('#submit-button input').removeClass('invisible');
+  });
+  $('#incident_incident_type').focus(function() {
+    $('#map-for-mapping').addClass('invisible');
+    $('#incident-details').removeClass('invisible');
+    $('#submit-button input').removeClass('invisible');
+  });
+  $('#incident_location').focus(function() {
+    $('#map-for-mapping').addClass('invisible');
+    $('#incident-details').removeClass('invisible');
+    $('#submit-button input').removeClass('invisible');
+  });
+  $('#incident_license').focus(function() {
     $('#map-for-mapping').addClass('invisible');
     $('#incident-details').removeClass('invisible');
     $('#submit-button input').removeClass('invisible');
@@ -141,7 +180,9 @@ $(document).on('ready', function() {
         if (status === google.maps.GeocoderStatus.OK) {
           var reader = results[0].formatted_address.split(", ");
           $('#location p').replaceWith("<p>Did you mean " + reader[0] +
-                          "? If not, please find your location on map</p>");
+            "? If not, please find your location on map or include your city</p>");
+            $('#incident_latitude').val(results[0].geometry.location.lat());
+            $('#incident_longitude').val(results[0].geometry.location.lng());
         }
       });
     }
