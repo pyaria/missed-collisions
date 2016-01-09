@@ -47,9 +47,8 @@ class IncidentsController < ApplicationController
       else
         hours_f = params["hoursEnd"].to_s + ":00"
       end
-      @hours = Incident.where(["reported_at >=? AND reported_at <=?", hours_i.to_datetime, hours_f.to_datetime])
-      @time = @months + @hours
-      byebug
+      @hours = Incident.where(["reported_at >? AND reported_at <?", hours_i.to_datetime, hours_f.to_datetime])
+      @time = @months + @hours      
     end
     respond_to do |format|
       format.html {render}
