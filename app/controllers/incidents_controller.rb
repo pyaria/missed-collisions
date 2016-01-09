@@ -30,8 +30,38 @@ class IncidentsController < ApplicationController
     end
   end
 
+  def time
+    @incident = Incident.new
+    if params.length == 3
+      @incidents = Incident.all
+    else
+
+      @months = Incident.where(["month >=? AND month <=?", params['monthsStart'].to_s, params['monthsEnd'].to_s])
+      if params['hoursStart'] == 0
+        hours_i = "0:01"
+      else
+        hours_i = params["hoursStart"].to_s + ":00"
+      end
+      if params['hoursEnd'] == 24
+        hours_f = "23.59"
+      else
+        hours_f = params["hoursEnd"].to_s + ":00"
+      end
+      @hours = Incident.where(["reported_at >=? AND reported_at <=?", hours_i.to_datetime, hours_f.to_datetime])
+      @time = @months + @hours
+      byebug
+    end
+    respond_to do |format|
+      format.html {render}
+      format.json {render json: @time.to_json }
+    end
+  end
+
+
+
   def create
     @incident = Incident.new incident_params
+    @incident.month = @incident.reported_on.mon
     respond_to do |format|
       if @incident.save
         format.html{redirect_to root_path}
