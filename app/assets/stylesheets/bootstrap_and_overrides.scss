@@ -11,6 +11,11 @@ circle-image {
   opacity: 0.1;
 }
 
+.invisible {
+  opacity: 0;
+  display: none;
+}
+
 img {
   width: 100%;
   height: 100%;
@@ -43,26 +48,14 @@ img.social {
   height: 500px;
 }
 
-.invisible {
-  opacity: 0;
-  display: none;
-}
-
 .sidebar {
   height: 100%;
+  width: 135px;
   float: left;
   background-color: orange;
   position: absolute;
   transition: 2s;
   z-index: 100;
-}
-
-.thin {
-  width: 7%;
-}
-
-.wide {
-  width: 9%;
 }
 
 button {

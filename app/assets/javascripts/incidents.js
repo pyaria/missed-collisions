@@ -157,12 +157,12 @@ $(document).on('ready', function() {
     }
   })
 
-  $('.sidebar').hover(function() {
-    $(this).toggleClass("wide");
-    setTimeout(function(){
-      $('.float-right').toggleClass('invisible').fadeIn(500);
-  }, 500)
-  });
+  // $('.sidebar').hover(function() {
+  //   $(this).toggleClass("wide");
+  //   setTimeout(function(){
+  //     $('.float-right').toggleClass('invisible').fadeIn(500);
+  // }, 500)
+  // });
 
 
   $('#incident_location').on('keyup',function() {
