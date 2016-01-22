@@ -6,3 +6,33 @@ button.on('click', function(){
   var newValue = value + 1;
   container.html(newValue);
 })
+
+
+remote:        Asset precompilation completed (18.30s)
+remote:        Cleaning assets
+remote:        Running: rake assets:clean
+remote:
+remote: ###### WARNING:
+remote:        Include 'rails_12factor' gem to enable all platform features
+remote:        See https://devcenter.heroku.com/articles/rails-integration-gems for more information.
+remote:
+remote: ###### WARNING:
+remote:        You have not declared a Ruby version in your Gemfile.
+remote:        To set your Ruby version add this line to your Gemfile:
+remote:        ruby '2.0.0'
+remote:        # See https://devcenter.heroku.com/articles/ruby-versions for more information.
+remote:
+remote: ###### WARNING:
+remote:        No Procfile detected, using the default web server (webrick)
+remote:        https://devcenter.heroku.com/articles/ruby-default-web-server
+remote:
+remote: -----> Discovering process types
+remote:        Procfile declares types     -> (none)
+remote:        Default types for buildpack -> console, rake, web, worker
+remote:
+remote: -----> Compressing... done, 31.8MB
+remote: -----> Launching...
+remote:        Released v5
+remote:        https://boiling-ridge-2459.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
