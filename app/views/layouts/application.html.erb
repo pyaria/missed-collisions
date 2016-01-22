@@ -3,7 +3,7 @@
 <head>
   <title>MissedCollisions</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
+  <script src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 
@@ -12,7 +12,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  
+
   <script>
   var geocoder;
   var map;
@@ -34,7 +34,7 @@
     function getPoints() {
       return $.ajax({
         method: 'GET',
-        url: 'http://localhost:3000/incidents/new.json'
+        url: '~/incidents/new.json'
       });
     }
 
@@ -93,7 +93,7 @@
     $('button#heading').click(function(){
       $.ajax({
         method: "GET",
-        url: "http://localhost:3000/incidents/new.json",
+        url: "~/incidents/new.json",
         data: { you_car: $('#you-car').attr('data-value'),
                 you_bike: $('#you-bike').attr('data-value'),
                 you_pedestrian: $('#you-pedestrian').attr('data-value'),
@@ -164,7 +164,7 @@
       var months = $('#month-scale').slider('option', "values");
       $.ajax({
         method: "GET",
-        url: "http://localhost:3000/incidents/time.json",
+        url: "~/incidents/time.json",
         data: { hoursStart: hours[0],
                 hoursEnd: hours[1],
                 monthsStart: months[0],
@@ -415,7 +415,7 @@
     console.log(hours, months);
     $.ajax({
       method: "GET",
-      url: "http://localhost:3000/incidents/new.json",
+      url: "~/incidents/new.json",
       data: { hoursStart: hours[0],
               hoursEnd: hours[1],
               monthsStart: months[0],
