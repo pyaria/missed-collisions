@@ -2,11 +2,10 @@
 <html>
 <head>
   <title>MissedCollisions</title>
+  <meta name="viewport", content="width=device-width, initial-scale=1" >
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <script src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
-
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-
   <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -17,6 +16,8 @@
   var geocoder;
   var map;
   var markers = [];
+
+  // initializes google maps
   function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: new google.maps.LatLng(49.265, -123.1),
@@ -25,12 +26,14 @@
       maxZoom: 18
     });
 
+    // invisible markers for info window on heatmap overlay
     var geocoder = new google.maps.Geocoder();
     var marker = new google.maps.MarkerImage('/assets/transparent.png',
                                       new google.maps.Size(16, 16),
                                       new google.maps.Point(0, 0),
                                       new google.maps.Point(8, 8));
 
+    // retrieves datapoints
     function getPoints() {
       return $.ajax({
         method: 'GET',
@@ -44,6 +47,9 @@
       markers.push(marker)
     };
 
+    function changeRadius() {
+      heatmap.set('radius', heatmap.get('radius') ? null : 20);
+    }
 
     promise.success(function(data){
       var dataPoints = [];
@@ -88,7 +94,10 @@
       function toggleHeatmap() {
         heatmap.setMap(heatmap.getMap() ? null : map);
       };
+      changeRadius();
     });
+
+
 
     $('button#heading').click(function(){
       $.ajax({
@@ -155,6 +164,7 @@
           function toggleHeatmap() {
             heatmap.setMap(heatmap.getMap() ? null : map);
           };
+          changeRadius();
         }
       })
     })
@@ -223,6 +233,7 @@
           function toggleHeatmap() {
             heatmap.setMap(heatmap.getMap() ? null : map);
           };
+          changeRadius();
         }
       })
     })
@@ -236,7 +247,14 @@
       <div class="modal-content" id="incident-form" >
         <%= simple_form_for @incident, data: { behavior: "autosave" }, remote: true do |incident| %>
           <div id="incident">
-            <div class="col-sm-6 form-group" id="incident-report">
+            <div class="col-md-6 col-xs-12 form-group">
+              <div id='map-for-mapping' class="invisible"></div>
+              <div id="welcome">
+                <h1>Welcome to Missed Collisions</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar mollis tellus sit amet sagittis. Praesent vehicula libero justo, vel bibendum nisi dignissim sed. Sed nec felis efficitur, dapibus nibh at, euismod enim. Vivamus non eleifend odio. Phasellus tempus ipsum eu tincidunt ornare. Nulla lectus urna, mollis in tempus sit amet, aliquet id enim. Proin bibendum risus nec dignissim elementum. Maecenas dui mi, dictum vel nunc a, pharetra scelerisque diam. Aliquam nec molestie elit, eu sollicitudin massa. Sed a iaculis magna. In hac habitasse platea dictumst. In hac habitasse platea dictumst. Phasellus in sapien interdum, ultrices mauris eget, auctor nunc.</p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group" id="incident-report">
               <div class="form-inline">
                 <h1>Submit a Report!</h1>
                 <div class="row">
@@ -301,19 +319,17 @@
                                         placeholder: "License number (optional)",
                                         class: "form-control" %>
               </div>
-            </div>
-            <div class="col-md-6 form-group">
-              <div id='map-for-mapping' class="invisible"></div>
               <div id="incident-details">
                 <h1>Incident Details</h1>
                 <%= incident.text_area :details,  class: "form-control",
-                                                  rows: 20,
+                                                  rows: 5,
                                                   placeholder: "optional details" %>
               </div>
               <div id="submit-button">
                 <%= incident.submit %>
               </div>
             </div>
+
           </div>
         <% end %>
       </div>
